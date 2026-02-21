@@ -1,5 +1,6 @@
 import { router } from './router/router'
 import { RouterProvider } from 'react-router-dom'
+import { AuthProvider } from './auth/AuthContext'
 
 import './App.css'
 
@@ -7,7 +8,10 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+      
     </>
   )
 }

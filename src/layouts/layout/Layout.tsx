@@ -4,8 +4,6 @@ import { AppHeader } from "../../components/header/AppHeader";
 
 const { Footer, Content } = Layout;
 
-
-
 const contentStyle: React.CSSProperties = {
     textAlign: 'center',
     minHeight: 120,
