@@ -1,4 +1,4 @@
-export interface TaskI {
+export interface ITask {
     id: number,
     title: string,
     description: string,
@@ -10,5 +10,5 @@ export interface TaskI {
 type Workflow = "backlog" | "inProgress" | "review" | "done";
 
 export type CardTaskProps = {
-    card:TaskI
+    card: ITask
 }

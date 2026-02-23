@@ -1,7 +1,7 @@
 import { Row } from "antd"
 import { Col } from "antd";
 import { Column } from "./Column/Column";
-import type { TaskI } from "../../../../types/task.type";
+import type { ITask } from "../../../../types/task.type";
 //Список задач для окремого проекту.
 
 /*
@@ -14,7 +14,7 @@ Tasks:
     authorId 
 */
 
-const cards: TaskI[] = [
+const cards: ITask[] = [
     { id:1, title: "Create headerdsgggdsgdsgdsgdsgdsg", description:"Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.", workflow: "backlog", boardId: 1, authorId: 1 },
     { id:2, title: "Create main",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "backlog", boardId: 1, authorId: 2 },
     { id:3, title: "Create footer sadfdsfgdsgfdsg",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "done", boardId: 1, authorId: 3 },
