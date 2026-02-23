@@ -1,7 +1,7 @@
-import type { TaskI } from "./task.type";
+import type { ITask } from "./task.type";
 
 export type ColumnProps = {
   title: string;
   color: string;
-  tasks: TaskI[];
+  tasks: ITask[];
 };
