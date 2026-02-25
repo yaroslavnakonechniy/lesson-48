@@ -13,7 +13,7 @@ const formItemLayout = {
     sm: { span: 14 },
   },
 };
-//форма для створення і редагування проекта, взалежності від кліку на кнопки Create/Edit кнопки форми будуть відповідати написнутій.
+//форма для створення і редагування проекта, взалежності від кліку на кнопки Create/Edit кнопки форми будуть відповідати натиснутій.
 export const FormProject = () => {
     const [form] = Form.useForm();
     const variant = Form.useWatch('variant', form);
