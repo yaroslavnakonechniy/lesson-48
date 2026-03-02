@@ -1,32 +1,15 @@
-import { Link } from "react-router-dom";
-import { useMatches, type UIMatch } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Header } from "antd/es/layout/layout"
 import { Button } from "antd";
 import { useAuth } from "../../auth/AuthContext";
-import { useParams } from "react-router-dom";
-import { CreateType } from "../../interfaces/createAction";
-import { useNavigate } from "react-router-dom";
-
 import styles from "./styles.module.scss"
-
+import { useCreateAction } from "../../hooks/UseCreateAction";
 
 export const AppHeader = () => {
 
     const { isAuth, logout } = useAuth();
-    const { projectId } = useParams();
     const navigate = useNavigate();
-    const matches = useMatches() as UIMatch<unknown, { createType?: CreateType }>[];
-
-    const currentMatch = [...matches].reverse().find((m) => m.handle?.createType);
-    const typeToCreate = currentMatch?.handle?.createType;
-
-    const handleCreate = () => {
-        if (typeToCreate === CreateType.BOARD) {
-            navigate('project/create');
-        } else if (typeToCreate === CreateType.TASK && projectId) {
-            navigate(`/project/${projectId}/tasks/create`);
-        }
-    };
+    const {createPath} = useCreateAction();
 
     return(
         <>
@@ -35,7 +18,7 @@ export const AppHeader = () => {
                     <Link to="/">Task Manager</Link>
                 </div>
                 <nav className={styles.header__navigation}>
-                    <Button type="primary" onClick={handleCreate}>Create</Button>
+                    <Button type="primary" onClick={() => navigate(createPath)}>Create</Button>
 
                     {isAuth ? (
                         <Button onClick={logout}>Logout</Button>
