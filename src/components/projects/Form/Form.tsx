@@ -46,14 +46,6 @@ export const FormProject = () => {
                         <Input.TextArea />
                     </Form.Item>
 
-                    <Form.Item
-                        label="RangePicker"
-                        name="RangePicker"
-                        rules={[{ required: true, message: 'Please input!' }]}
-                    >
-                        <RangePicker />
-                    </Form.Item>
-
                     <Form.Item label={null}>
                         <Button type="primary" htmlType="submit">
                         Submit

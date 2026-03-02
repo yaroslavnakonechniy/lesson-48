@@ -8,52 +8,76 @@ import { FormProject } from "../components/projects/Form/Form";
 import { FormTask } from "../components/projects/TasksManager/Form/Form";
 import { ProtectedRoute } from "../auth/ProtectedRoute";
 import { LoginPage } from "../pages/login/LoginPage";
+import { CreateType } from "../interfaces/createAction";
 
 export const router = createBrowserRouter([
     {
-
-
         Component: LayoutPage,
         children:[
             {
                 path: '/',
+                handle: {createType: CreateType.BOARD},
                 Component: Projects,
             },
             {
                 element: <ProtectedRoute />,   // МІДДЛВАР
+                handle: {createType: CreateType.BOARD},
                 children: [
                     {
-                        path: 'project/:projectId', //за цим url має вилитіти попап з описом проекта, 
-                                                    // зараз він просто відображається через Outlet
-                        Component: ProjectDetailes
-                    },
-
-                    {
-                        path: 'project/:projectId/edit',
-                        Component: FormProject
-                    },
-
-                    {
-                        path: 'project/:projectId/tasks',
-                        Component: TasksManager,
+                        path: "project",
                         children: [
                             {
-                                path: ":taskId",//за цим url має вилитіти попап з описом проекта, 
-                                                // зараз він просто відображається через Outlet
-                                Component: TaskDetails
+                                path: "create",
+                                Component: FormProject
                             },
-                                                {
-                                path: ":taskId/edit",//за цим url має вилитіти попап з описом проекта, 
-                                                // зараз він просто відображається через Outlet
-                                Component: FormTask //
-                            }
+                            {
+                                path: ':projectId', //за цим url має вилитіти попап з описом проекта, 
+                                                            // зараз він просто відображається через Outlet
+                                children: [
+                                    {
+                                        index: true,
+                                        Component: ProjectDetailes,
+                                    },
+                                    {
+                                        path: 'edit',
+                                        handle: {createType: CreateType.BOARD},
+                                        Component: FormProject
+                                    },
+                                    {
+                                        path: 'tasks',
+                                        handle: {createType: CreateType.TASK},
+                                        Component: TasksManager,
+                                        children: [
+                                            {
+                                                path: "create",             
+                                                Component: FormTask
+                                            },
+                                            {
+                                                path: ":taskId",//за цим url має вилитіти попап з описом проекта, 
+                                                                // зараз він просто відображається через Outlet                                           
+                                                children: [
+                                                    {
+                                                        index: true,
+                                                        Component: TaskDetails,
+                                                    },
+                                                    {
+                                                        path: "edit",//за цим url має вилитіти попап з описом проекта, 
+                                                                        // зараз він просто відображається через Outlet     
+                                                        Component: FormTask //
+                                                    }
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                ]
+                            },
                         ]
-                    },
+                    }
                 ]
             },
         ]
-
     },
+
     {
         path: "/login",
         Component: LoginPage,
