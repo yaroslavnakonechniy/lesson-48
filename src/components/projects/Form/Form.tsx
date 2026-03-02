@@ -1,6 +1,5 @@
 import { Button, DatePicker, Form, Input, Divider, Typography } from 'antd';
 
-const { RangePicker } = DatePicker;
 const { Title } = Typography
 
 const formItemLayout = {
