@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Button, DatePicker, Form, Input, Divider, Typography } from 'antd';
+import { Button, Form, Input, Divider, Typography } from 'antd';
 
-const { RangePicker } = DatePicker;
 const { Title } = Typography
 
 const formItemLayout = {
@@ -44,7 +43,7 @@ export const FormTask = () => {
                         <Input />
                     </Form.Item>
                     
-                    <Form.Item label="boardId" name="boardId" rules={[{ required: true, message: 'Please input!' }]}>
+                    <Form.Item label="boardId" name="boardId" initialValue={projectId} rules={[{ required: true, message: 'Please input!' }]}>
                         <Input />
                     </Form.Item>
 
@@ -58,14 +57,6 @@ export const FormTask = () => {
                         rules={[{ required: true, message: 'Please input!' }]}
                     >
                         <Input.TextArea />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="RangePicker"
-                        name="RangePicker"
-                        rules={[{ required: true, message: 'Please input!' }]}
-                    >
-                        <RangePicker />
                     </Form.Item>
 
                     <Form.Item label={null}>

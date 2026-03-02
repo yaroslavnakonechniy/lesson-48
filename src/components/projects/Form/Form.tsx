@@ -1,6 +1,5 @@
 import { Button, DatePicker, Form, Input, Divider, Typography } from 'antd';
 
-const { RangePicker } = DatePicker;
 const { Title } = Typography
 
 const formItemLayout = {
@@ -44,14 +43,6 @@ export const FormProject = () => {
                         rules={[{ required: true, message: 'Please input!' }]}
                     >
                         <Input.TextArea />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="RangePicker"
-                        name="RangePicker"
-                        rules={[{ required: true, message: 'Please input!' }]}
-                    >
-                        <RangePicker />
                     </Form.Item>
 
                     <Form.Item label={null}>
