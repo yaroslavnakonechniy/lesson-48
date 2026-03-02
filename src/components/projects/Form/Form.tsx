@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Divider, Typography } from 'antd';
+import { Button, Form, Input, Divider, Typography } from 'antd';
 
 const { Title } = Typography
 

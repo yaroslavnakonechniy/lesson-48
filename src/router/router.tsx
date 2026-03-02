@@ -4,6 +4,7 @@ import { Projects } from "../components/projects/Projects";
 import { TasksManager } from "../components/projects/TasksManager/TasksManager";
 import { ProjectDetailes } from "../components/projects/ProjectDetails/ProjectDetails";
 import { TaskDetails } from "../components/projects/TasksManager/TaskDetails/TaskDetails";
+import { FormPopUp } from "../components/projects/Form/FormPopUp";
 import { FormProject } from "../components/projects/Form/Form";
 import { FormTask } from "../components/projects/TasksManager/Form/Form";
 import { ProtectedRoute } from "../auth/ProtectedRoute";
@@ -28,7 +29,7 @@ export const router = createBrowserRouter([
                         children: [
                             {
                                 path: "create",
-                                Component: FormProject
+                                Component: FormPopUp
                             },
                             {
                                 path: ':projectId', //за цим url має вилитіти попап з описом проекта, 
@@ -50,7 +51,7 @@ export const router = createBrowserRouter([
                                         children: [
                                             {
                                                 path: "create",             
-                                                Component: FormTask
+                                                Component: FormPopUp
                                             },
                                             {
                                                 path: ":taskId",//за цим url має вилитіти попап з описом проекта, 
