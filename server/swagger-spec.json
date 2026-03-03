@@ -1,0 +1,592 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Task Manager API",
+        "version": "1.0.0",
+        "description": "API for managing boards, tasks, and comments, using JWT (in session) for authentication."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/api/v1",
+            "description": "Local test server"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "CookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "session",
+                "description": "Authorization occurs via the JWT token stored in the 'session' cookie (which is set upon sign-in). All protected routes will work after 'sign-in'."
+            }
+        },
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "name": { "type": "string" },
+                    "email": { "type": "string", "format": "email" }
+                }
+            },
+            "Board": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "name": { "type": "string" },
+                    "description": { "type": "string" },
+                    "authorId": { "type": "string" }
+                }
+            },
+            "WorkflowStatus": {
+                "type": "object",
+                "properties": {
+                "code": { 
+                    "type": "string", 
+                    "enum": ["todo", "progress", "done"],
+                    "example": "progress"
+                },
+                "label": { 
+                    "type": "string", 
+                    "enum": ["To Do", "In Progress", "Done"],
+                    "example": "In Progress"
+                }
+                }
+            },
+            "Task": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "title": { "type": "string" },
+                    "description": { "type": "string" },
+                    "workflow": { "$ref": "#/components/schemas/WorkflowStatus" },
+                    "boardId": { "type": "string" },
+                    "authorId": { "type": "string" }
+                }
+            },
+            "Comment": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "format": "uuid" },
+                    "message": { "type": "string" },
+                    "taskId": { "type": "string" },
+                    "authorId": { "type": "string" }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "data": { "type": "object" },
+                    "error": {
+                        "type": "object",
+                        "properties": {
+                            "code": { "type": "string" },
+                            "message": { "type": "string" },
+                            "details": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "field": { "type": "string" },
+                                        "message": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "SuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "data": { "type": "object" },
+                    "error": { "type": "object" }
+                }
+            }
+        },
+        "responses": {
+            "Unauthorized": {
+                "description": "Missing or invalid access token (Cookie 'session' not set or expired).",
+                "content": {
+                    "application/json": {
+                        "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                    }
+                }
+            },
+            "BadRequest": {
+                "description": "Request data validation error.",
+                "content": {
+                    "application/json": {
+                        "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                    }
+                }
+            },
+            "Forbidden": {
+                "description": "Access denied. The user is not the owner of the resource or does not have access to it.",
+                "content": {
+                    "application/json": {
+                        "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                    }
+                }
+            },
+            "NotFound": {
+                "description": "Resource not found.",
+                "content": {
+                    "application/json": {
+                        "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/auth/me": {
+            "get": {
+                "tags": ["Authentication"],
+                "summary": "Get current user information",
+                "responses": {
+                    "200": {
+                        "description": "Successful response with user information.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        { "$ref": "#/components/schemas/SuccessResponse" },
+                                        { "properties": { "data": { "$ref": "#/components/schemas/User" } } }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": { "$ref": "#/components/responses/Unauthorized" }
+                }
+            }
+        },
+        "/auth/sign-up": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Register a new user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["name", "email", "password"],
+                                "properties": {
+                                    "name": { "type": "string", "example": "User Name" },
+                                    "email": { "type": "string", "format": "email", "example": "test@example.com" },
+                                    "password": { "type": "string", "minLength": 6, "example": "password123" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful registration and sign-in. JWT token is set in the 'session' cookie.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        { "$ref": "#/components/schemas/SuccessResponse" },
+                                        { "properties": { "data": { "$ref": "#/components/schemas/User" } } }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": { "$ref": "#/components/responses/BadRequest" }
+                }
+            }
+        },
+        "/auth/sign-in": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "User sign-in",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["email", "password"],
+                                "properties": {
+                                    "email": { "type": "string", "format": "email", "example": "test@example.com" },
+                                    "password": { "type": "string", "example": "password123" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful sign-in. JWT token is set in the 'session' cookie.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        { "$ref": "#/components/schemas/SuccessResponse" },
+                                        { "properties": { "data": { "$ref": "#/components/schemas/User" } } }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": { "$ref": "#/components/responses/Unauthorized" }
+                }
+            }
+        },
+        "/auth/sign-out": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "User sign-out",
+                "responses": {
+                    "200": {
+                        "description": "Successful sign-out. 'session' cookie cleared.",
+                        "content": {
+                            "application/json": {
+                                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/boards": {
+            "get": {
+                "tags": ["Boards"],
+                "summary": "Get a list of the current user's boards",
+                "security": [ { "CookieAuth": [] } ],
+                "responses": {
+                    "200": { "description": "List of boards", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Board" } } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" }
+                }
+            },
+            "post": {
+                "tags": ["Boards"],
+                "summary": "Create a new board",
+                "security": [ { "CookieAuth": [] } ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["name"],
+                                "properties": {
+                                    "name": { "type": "string", "example": "My New Project Board" },
+                                    "description": { "type": "string", "example": "Tasks for the new project (optional)" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": { "description": "Board successfully created", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Board" } } } ] } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" }
+                }
+            }
+        },
+        "/boards/{boardId}": {
+            "parameters": [
+                { "name": "boardId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+            ],
+            "get": {
+                "tags": ["Boards"],
+                "summary": "Get board by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "responses": {
+                    "200": { "description": "Board information", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Board" } } } ] } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "put": {
+                "tags": ["Boards"],
+                "summary": "Update board by ID (fully or partially)",
+                "security": [ { "CookieAuth": [] } ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": { "type": "string", "example": "Updated Board Name" },
+                                    "description": { "type": "string", "example": "Updated description" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Board updated", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Board" } } } ] } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "delete": {
+                "tags": ["Boards"],
+                "summary": "Delete board by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "responses": {
+                    "200": { "description": "Board successfully deleted", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/boards/{boardId}/tasks": {
+            "get": {
+                "tags": ["Boards", "Tasks"],
+                "summary": "Get a list of tasks for a specific board",
+                "security": [ { "CookieAuth": [] } ],
+                "parameters": [
+                    { "name": "boardId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+                ],
+                "responses": {
+                    "200": { "description": "List of tasks", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Task" } } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "tags": ["Tasks"],
+                "summary": "Get a list of tasks for a board (using query parameter)",
+                "security": [ { "CookieAuth": [] } ],
+                "parameters": [
+                    { "name": "boardId", "in": "query", "required": true, "schema": { "type": "string", "format": "uuid" }, "description": "Board ID" }
+                ],
+                "responses": {
+                    "200": { "description": "List of tasks", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Task" } } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "post": {
+                "tags": ["Tasks"],
+                "summary": "Create a new task on a board",
+                "security": [ { "CookieAuth": [] } ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["title", "boardId"],
+                                "properties": {
+                                    "title": { "type": "string", "example": "Fix bug in auth" },
+                                    "description": { "type": "string", "example": "Authentication is broken (optional)" },
+                                    "boardId": { "type": "string", "format": "uuid", "example": "board-uuid-123" },
+                                    "workflow": { "type": "string", "enum": ["todo", "progress", "done"], "default": "todo" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": { "description": "Task created", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Task" } } } ] } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/tasks/{taskId}": {
+            "parameters": [
+                { "name": "taskId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+            ],
+            "get": {
+                "tags": ["Tasks"],
+                "summary": "Get task by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "responses": {
+                    "200": { "description": "Task information", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Task" } } } ] } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "put": {
+                "tags": ["Tasks"],
+                "summary": "Update task by ID (title, description)",
+                "security": [ { "CookieAuth": [] } ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": { "type": "string", "example": "Updated Task Title (optional)" },
+                                    "description": { "type": "string", "example": "Updated task description (optional)" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Task updated", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Task" } } } ] } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "delete": {
+                "tags": ["Tasks"],
+                "summary": "Delete task by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "responses": {
+                    "200": { "description": "Task successfully deleted", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/tasks/{taskId}/workflow": {
+            "put": {
+                "tags": ["Tasks"],
+                "summary": "Update task workflow status by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "parameters": [
+                    { "name": "taskId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["workflow"],
+                                "properties": {
+                                    "workflow": { "type": "string", "enum": ["todo", "progress", "done"], "example": "progress" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Task status updated", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Task" } } } ] } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/tasks/{taskId}/comments": {
+            "get": {
+                "tags": ["Comments", "Tasks"],
+                "summary": "Get a list of comments for a specific task",
+                "security": [ { "CookieAuth": [] } ],
+                "parameters": [
+                    { "name": "taskId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+                ],
+                "responses": {
+                    "200": { "description": "List of comments", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Comment" } } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/comments": {
+            "get": {
+                "tags": ["Comments"],
+                "summary": "Get a list of comments for a task (using query parameter)",
+                "security": [ { "CookieAuth": [] } ],
+                "parameters": [
+                    { "name": "taskId", "in": "query", "required": true, "schema": { "type": "string", "format": "uuid" }, "description": "Task ID" }
+                ],
+                "responses": {
+                    "200": { "description": "List of comments", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Comment" } } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "post": {
+                "tags": ["Comments"],
+                "summary": "Create a new comment for a task",
+                "security": [ { "CookieAuth": [] } ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["message", "taskId"],
+                                "properties": {
+                                    "message": { "type": "string", "example": "This task is urgent." },
+                                    "taskId": { "type": "string", "format": "uuid", "example": "task-uuid-456" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": { "description": "Comment created", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Comment" } } } ] } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        },
+        "/comments/{commentId}": {
+            "parameters": [
+                { "name": "commentId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+            ],
+            "put": {
+                "tags": ["Comments"],
+                "summary": "Update comment by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["message"],
+                                "properties": {
+                                    "message": { "type": "string", "example": "Updated comment message." }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Comment updated", "content": { "application/json": { "schema": { "allOf": [ { "$ref": "#/components/schemas/SuccessResponse" }, { "properties": { "data": { "$ref": "#/components/schemas/Comment" } } } ] } } } },
+                    "400": { "$ref": "#/components/responses/BadRequest" },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            },
+            "delete": {
+                "tags": ["Comments"],
+                "summary": "Delete comment by ID",
+                "security": [ { "CookieAuth": [] } ],
+                "responses": {
+                    "200": { "description": "Comment successfully deleted", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } } },
+                    "401": { "$ref": "#/components/responses/Unauthorized" },
+                    "403": { "$ref": "#/components/responses/Forbidden" },
+                    "404": { "$ref": "#/components/responses/NotFound" }
+                }
+            }
+        }
+    }
+}

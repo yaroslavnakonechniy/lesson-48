@@ -1,0 +1,114 @@
+-----------------------
+*      PROMPT #1      *
+-----------------------
+
+Hello! Could you please help me write a Node.js Express backend with the API routes listed below?
+
+Database setup is also required. However, instead of a real database, please use the `json-server` npm module.
+
+It is also necessary to use the `cookie-session` and `jwt-token` modules and add an authentication middleware everywhere except for the Authentication routes.
+
+Also, please add validation via `express-validation` during:
+  - registration
+  - sign-in
+  - adding, editing boards
+  - adding, editing tasks (including checking that `boardId` is required upon creation and exists)
+  - adding comments (including checking that `taskId` is required upon creation and exists)
+And check for an existing email during registration.
+It is also necessary to use UUIDs instead of standard IDs via the `crypto.randomUUID()` module.
+
+For responses, please use the standard approach for both successful and unsuccessful operations.
+
+Example of a successful operation:
+{
+  "status": "success",
+  "code": "SUCCESS",
+  "data": { "<some data>" },
+  "error": {}
+}
+
+Example of an unsuccessful operation:
+{
+  "status": "error",
+  "code": "INVALID_CREDENTIALS",
+  "data": {},
+  "error": {
+     "message": "Some text",
+     "details": [
+        // array errors from fields for example email, password and etc
+     ]
+  }
+}
+
+Status Codes:
+200 SUCCESS
+201 SUCCESS
+400 VALIDATION_ERROR
+401 UNAUTHORIZED
+401 INVALID_CREDENTIALS
+403 FORBIDDEN
+404 NOT_FOUND
+
+API Routes:
+
+Authentication:
+POST: /api/v1/auth/sign-in
+POST: /api/v1/auth/sign-up
+POST: /api/v1/auth/sign-out
+
+Boards:
+GET: /api/v1/boards
+GET: /api/v1/boards/:boardId
+POST: /api/v1/boards
+PUT: /api/v1/boards/:boardId
+DELETE: /api/v1/boards/:boardId
+
+Tasks:
+GET: /api/v1/tasks?boardId=<id>
+GET: /api/v1/tasks/:taskId
+POST: /api/v1/tasks
+PUT: /api/v1/tasks/:taskId
+PUT: /api/v1/tasks/:taskId/workflow
+DELETE: /api/v1/tasks/:taskId
+
+Comments:
+GET: /api/v1/comments?taskId=<id>
+POST: /api/v1/comments
+PUT: /api/v1/comments/:commentId
+DELETE: /api/v1/comments/:commentId
+
+DB Schemas:
+
+Auth:
+id
+name
+email
+password
+
+Boards:
+id
+name
+description
+authorId
+
+Tasks:
+id
+title
+description
+workflow
+boardId
+authorId
+
+Comments:
+id
+message
+taskId
+
+
+
+-----------------------
+*      PROMPT #2      *
+-----------------------
+Hello. You previously wrote the server code for me. Could I ask for your further help in describing the **Swagger documentation** so that the routes can be run and displayed nicely, etc.?
+
+** Source of code from result of prompt 1 **
