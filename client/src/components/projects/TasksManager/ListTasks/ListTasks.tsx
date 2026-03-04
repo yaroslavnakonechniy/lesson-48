@@ -1,41 +1,28 @@
-import { Row } from "antd"
-import { Col } from "antd";
+import { Row, Col, Spin, Alert } from "antd";
+import { useParams } from "react-router-dom";
 import { Column } from "./Column/Column";
-import type { ITask } from "../../../../types/task.type";
+import { useGetTaskBoardByIdQuery } from "../../../../feachers/boards/api/boards.api";
 //Список задач для окремого проекту.
 
-/*
-Tasks:
-    id
-    title
-    description
-    workflow
-    boardId
-    authorId 
-*/
-
-const cards: ITask[] = [
-    { id:1, title: "Create headerdsgggdsgdsgdsgdsgdsg", description:"Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.", workflow: "backlog", boardId: 1, authorId: 1 },
-    { id:2, title: "Create main",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "backlog", boardId: 1, authorId: 2 },
-    { id:3, title: "Create footer sadfdsfgdsgfdsg",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "done", boardId: 1, authorId: 3 },
-    { id:4, title: "Create menu",description:"Lorem ipsum dolorLorem ipsum dolor sit amet consectetur. sit amet consectetur.", workflow: "inProgress", boardId: 1, authorId: 4 },
-    { id:5, title: "Create buttons for menu",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "inProgress", boardId: 5, authorId: 5 },
-    { id:6, title: "Create cardProject",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "done", boardId: 6, authorId: 6 },
-    { id:7, title: "Create main",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "done", boardId: 1, authorId: 2 },
-    { id:8, title: "Create footer",description:"LoremLorem ipsum dolor sit Lorem ipsum dolor sit Lorem ipsum dolor sit Lorem ipsum dolor sit Lorem ipsum dolor sit  ipsum dolor sit amet consectetur.", workflow: "review", boardId: 1, authorId: 3 },
-    { id:9, title: "Create menu",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "done", boardId: 1, authorId: 4 },
-    { id:10, title: "Create buttons for menu",description:"Lorem ipsum Lorem ipsum dolor sit amet consectetur.dolor sit amet consectetur.", workflow: "inProgress", boardId: 5, authorId: 5 },
-    { id:11, title: "Create cardProject",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "inProgress", boardId: 6, authorId: 6 },
-    { id:11, title: "Create cardProject",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "inProgress", boardId: 6, authorId: 6 },
-    { id:11, title: "Create cardProject",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "inProgress", boardId: 6, authorId: 6 },
-    { id:11, title: "Create cardProject",description:"Lorem ipsum dolor sit amet consectetur.", workflow: "inProgress", boardId: 6, authorId: 6 },
-]
-
 export const ListTasks = () => {
+    const {boardId} = useParams<{boardId: string}>();
+    const { data, isLoading, error } = useGetTaskBoardByIdQuery(boardId!);
 
-    const backlog = cards.filter(t => t.workflow === "backlog");
-    const inProgress = cards.filter(t => t.workflow === "inProgress");
-    const done = cards.filter(t => t.workflow === "done");
+    console.log("Task:Тип данных:", typeof data, "Это массив?", Array.isArray(data), "Значение:", data);//
+    
+    //useMemo
+    const backlog = data?.filter(t => t.workflow.code === "todo");
+    const inProgress = data?.filter(t => t.workflow.code === "progress");
+    const done = data?.filter(t => t.workflow.code === "done");
+    //useMemo
+
+    if (isLoading) {
+        return <Spin size="large" style={{ marginTop: 100 }} />;
+    }
+
+    if (error) {
+        return <Alert type="error" message="Failed to load tasks of board" />;
+    }
 
     return(
         <>
@@ -43,15 +30,15 @@ export const ListTasks = () => {
                 <Row gutter={16} align="top">
 
                     <Col span={8}>
-                        <Column title="Backlog" color="#f0f0f0" tasks={backlog} />
+                        <Column title="Backlog" color="#f0f0f0" tasks={backlog ?? []} />
                     </Col>
 
                     <Col span={8}>
-                        <Column title="In Progress" color="#e6f4ff" tasks={inProgress} />
+                        <Column title="In Progress" color="#e6f4ff" tasks={inProgress ?? []} />
                     </Col>
 
                     <Col span={8}>
-                        <Column title="Done" color="#f6ffed" tasks={done} />
+                        <Column title="Done" color="#f6ffed" tasks={done ?? []} />
                     </Col>
 
                 </Row>

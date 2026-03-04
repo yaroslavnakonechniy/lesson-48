@@ -1,13 +1,16 @@
 export interface ITask {
-    id: number,
+    id: string,
     title: string,
     description: string,
     workflow: Workflow,
-    boardId: number,
-    authorId: number
+    boardId: string,
+    authorId: string
 }
 
-type Workflow = "backlog" | "inProgress" | "review" | "done";
+type Workflow = {
+    code: "todo" | "progress" | "done",
+    label: string
+}
 
 export type CardTaskProps = {
     card: ITask
