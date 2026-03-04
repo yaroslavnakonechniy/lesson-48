@@ -1,36 +1,27 @@
-import { Row } from "antd";
+import { useGetBoardsQuery } from '../../../feachers/boards/api/boards.api';
+import { Row, Spin, Alert } from "antd";
 import { CardProject } from "./cardProject/CardProject"
-//Список Проектів
-const  projects = [
-    {id:1, name:"Project #1", description: "This project from Hillel company", authorId:1},
-    {id:2, name:"Project #2", description: "This project about CARS", authorId:1},
-    {id:3, name:"Project #3", description: "This project about creating project", authorId:1},
-    {id:3, name:"Project #3", description: "This project about creating project", authorId:1},
-    {id:3, name:"Project #3", description: "This project about creating project", authorId:1},
-    {id:3, name:"Project #3", description: "This project about creating project", authorId:1}
-];
-//тут ще буде приходити data з api про проекти, data передається в <CardProject /> де і відображатимуться картки проектів
-
-/* Boards:
-        GET: /api/v1/boards
-        GET: /api/v1/boards/:boardId
-        POST: /api/v1/boards
-        PUT: /api/v1/boards/:boardId
-        DELETE: /api/v1/boards/:boardId
- */
+    
 export const ListProjects = () => {
-    return(
-        <>
-            <div style={{ padding: "40px" }}>
-                <Row gutter={[24, 24]}>
-                    {
-                        projects.map((project) => (
-                            <CardProject key={project.id} project={project}/>
-                        ))
-                    }
-                </Row>
-            </div>
+    const { data, isLoading, error } = useGetBoardsQuery();
 
-        </>
-    )
+    if (isLoading) {
+        return <Spin size="large" style={{ marginTop: 100 }} />;
+    }
+
+    if (error) {
+        return <Alert type="error" message="Failed to load boards" />;
+    }
+
+    console.log("Тип данных:", typeof data, "Это массив?", Array.isArray(data), "Значение:", data);//
+
+    return (
+        <div style={{ padding: "40px" }}>
+            <Row gutter={[24, 24]}>
+                {data?.map((board) => (
+                    <CardProject key={board.id} board={board} />
+                ))}
+            </Row>
+        </div>
+    );
 }

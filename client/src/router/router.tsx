@@ -7,76 +7,73 @@ import { TaskDetails } from "../components/projects/TasksManager/TaskDetails/Tas
 import { FormPopUp } from "../components/projects/Form/FormPopUp";
 import { FormProject } from "../components/projects/Form/Form";
 import { FormTask } from "../components/projects/TasksManager/Form/Form";
-import { ProtectedRoute } from "../auth/ProtectedRoute";
-import { LoginPage } from "../pages/login/LoginPage";
+import { ProtectedRoute } from "../feachers/auth/components/ProtectedRoute";
+import { LoginPage } from "../feachers/auth/pages/LoginPages";
 import { CreateType } from "../interfaces/createAction";
 
 export const router = createBrowserRouter([
-    {
+    {   
+        path: "/",
         Component: LayoutPage,
-        children:[
-            {
-                path: '/',
-                handle: {createType: CreateType.BOARD},
-                Component: Projects,
-            },
+        children: [
             {
                 element: <ProtectedRoute />,   // МІДДЛВАР
                 handle: {createType: CreateType.BOARD},
+            },
+            {
+                path: "boards",
+                Component: Projects,
                 children: [
                     {
-                        path: "project",
+                        path: "create",
+                        Component: FormPopUp
+                    },
+                    {
+                        path: ':boardId',
                         children: [
                             {
-                                path: "create",
-                                Component: FormPopUp
+                                index: true,
+                                Component: ProjectDetailes,
                             },
                             {
-                                path: ':projectId', //за цим url має вилитіти попап з описом проекта, 
-                                                            // зараз він просто відображається через Outlet
+                                path: 'edit',
+                                handle: {createType: CreateType.BOARD},
+                                Component: FormProject
+                            },
+                            {
+                                path: 'tasks',
+                                handle: {createType: CreateType.TASK},
+                                Component: TasksManager,
                                 children: [
                                     {
-                                        index: true,
-                                        Component: ProjectDetailes,
+                                        path: "create",             
+                                        Component: FormPopUp
                                     },
                                     {
-                                        path: 'edit',
-                                        handle: {createType: CreateType.BOARD},
-                                        Component: FormProject
-                                    },
-                                    {
-                                        path: 'tasks',
-                                        handle: {createType: CreateType.TASK},
-                                        Component: TasksManager,
+                                        path: ":taskId",//за цим url має вилитіти попап з описом проекта, 
+                                                        // зараз він просто відображається через Outlet                                           
                                         children: [
                                             {
-                                                path: "create",             
-                                                Component: FormPopUp
+                                                index: true,
+                                                Component: TaskDetails,
                                             },
                                             {
-                                                path: ":taskId",//за цим url має вилитіти попап з описом проекта, 
-                                                                // зараз він просто відображається через Outlet                                           
-                                                children: [
-                                                    {
-                                                        index: true,
-                                                        Component: TaskDetails,
-                                                    },
-                                                    {
-                                                        path: "edit",//за цим url має вилитіти попап з описом проекта, 
-                                                                        // зараз він просто відображається через Outlet     
-                                                        Component: FormTask //
-                                                    }
-                                                ]
-                                            },
+                                                path: "edit",//за цим url має вилитіти попап з описом проекта, 
+                                                                // зараз він просто відображається через Outlet     
+                                                Component: FormTask //
+                                            }
                                         ]
                                     },
                                 ]
                             },
                         ]
-                    }
+                    },
                 ]
             },
+
+
         ]
+
     },
 
     {
@@ -88,3 +85,76 @@ export const router = createBrowserRouter([
         element: <Navigate to='/' />
     }
 ])
+
+
+/**
+ * 
+ * {
+        Component: LayoutPage,
+        children:[
+            {
+                path: '/',
+                handle: {createType: CreateType.BOARD},
+                Component: Projects,
+                children: [
+                    {
+                        element: <ProtectedRoute />,   // МІДДЛВАР
+                        handle: {createType: CreateType.BOARD},
+                        children: [
+                            {
+                                path: "boards",
+                                children: [
+                                    {
+                                        path: "create",
+                                        Component: FormPopUp
+                                    },
+                                    {
+                                        path: ':boardId',
+                                        children: [
+                                            {
+                                                index: true,
+                                                Component: ProjectDetailes,
+                                            },
+                                            {
+                                                path: 'edit',
+                                                handle: {createType: CreateType.BOARD},
+                                                Component: FormProject
+                                            },
+                                            {
+                                                path: 'tasks',
+                                                handle: {createType: CreateType.TASK},
+                                                Component: TasksManager,
+                                                children: [
+                                                    {
+                                                        path: "create",             
+                                                        Component: FormPopUp
+                                                    },
+                                                    {
+                                                        path: ":taskId",//за цим url має вилитіти попап з описом проекта, 
+                                                                        // зараз він просто відображається через Outlet                                           
+                                                        children: [
+                                                            {
+                                                                index: true,
+                                                                Component: TaskDetails,
+                                                            },
+                                                            {
+                                                                path: "edit",//за цим url має вилитіти попап з описом проекта, 
+                                                                                // зараз він просто відображається через Outlet     
+                                                                Component: FormTask //
+                                                            }
+                                                        ]
+                                                    },
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                ]
+            },
+            
+        ]
+    },
+ */
