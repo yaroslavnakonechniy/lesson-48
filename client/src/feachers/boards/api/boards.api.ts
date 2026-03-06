@@ -47,6 +47,15 @@ export const boardsApi = baseApi.injectEndpoints({
       invalidatesTags: ['Boards'],
     }),
 
+    updateBoard: builder.mutation<Board, { id: string; name: string; description?: string; }>({
+      query: ({ id, ...body }) => ({
+        url: `/boards/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Boards'],
+    }),
+
     deleteBoard: builder.mutation<void, string>({
       query: (boardId) => ({
         url: `/boards/${boardId}`,
@@ -62,5 +71,6 @@ export const {
   useGetBoardByIdQuery,
   useGetTaskBoardByIdQuery,
   useCreateBoardMutation,
+  useUpdateBoardMutation,
   useDeleteBoardMutation,
 } = boardsApi;

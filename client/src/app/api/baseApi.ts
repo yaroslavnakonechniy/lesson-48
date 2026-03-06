@@ -4,8 +4,8 @@ export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/v1',
-    credentials: 'include', // критично для cookie
+    credentials: 'include',
   }),
-  tagTypes: ['Boards', 'Auth'],
+  tagTypes: ['Boards', 'Auth', 'Tasks'],
   endpoints: () => ({}),
 });

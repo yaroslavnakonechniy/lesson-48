@@ -2,7 +2,7 @@ import { Row, Col, Spin, Alert } from "antd";
 import { useParams } from "react-router-dom";
 import { Column } from "./Column/Column";
 import { useGetTaskBoardByIdQuery } from "../../../../feachers/boards/api/boards.api";
-//Список задач для окремого проекту.
+//Список задач для окремого Борда.
 
 export const ListTasks = () => {
     const {boardId} = useParams<{boardId: string}>();
@@ -40,7 +40,6 @@ export const ListTasks = () => {
                     <Col span={8}>
                         <Column title="Done" color="#f6ffed" tasks={done ?? []} />
                     </Col>
-
                 </Row>
             </div>
         </>

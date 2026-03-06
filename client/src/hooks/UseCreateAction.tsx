@@ -2,7 +2,7 @@ import { useMatches, useParams, type UIMatch } from "react-router-dom";
 import { CreateType } from "../interfaces/createAction";
 
 export const useCreateAction = () => {
-    const { projectId } = useParams();
+    const { boardId } = useParams();
     const matches = useMatches() as UIMatch<unknown, { createType?: CreateType }>[];
 
     const currentMatch = [...matches].reverse().find((m) => m.handle?.createType);
@@ -15,9 +15,9 @@ export const useCreateAction = () => {
         type,
         isTask,
         isBoard,
-        projectId,
-        createPath: isTask && projectId 
-            ? `/project/${projectId}/tasks/create` 
-            : '/project/create'
+        boardId,
+        createPath: isTask
+            ? `/tasks/create` 
+            : '/boards/create'
     };
 };

@@ -1,8 +1,8 @@
-import { useGetBoardsQuery } from '../../../feachers/boards/api/boards.api';
+import { useGetBoardsQuery } from '../api/boards.api';
 import { Row, Spin, Alert } from "antd";
-import { CardProject } from "./cardProject/CardProject"
+import { CardBoard } from "../components/cardBoard/CardBoard"
     
-export const ListProjects = () => {
+export const ListBoard = () => {
     const { data, isLoading, error } = useGetBoardsQuery();
 
     if (isLoading) {
@@ -19,7 +19,7 @@ export const ListProjects = () => {
         <div style={{ padding: "40px" }}>
             <Row gutter={[24, 24]}>
                 {data?.map((board) => (
-                    <CardProject key={board.id} board={board} />
+                    <CardBoard key={board.id} board={board} />
                 ))}
             </Row>
         </div>
