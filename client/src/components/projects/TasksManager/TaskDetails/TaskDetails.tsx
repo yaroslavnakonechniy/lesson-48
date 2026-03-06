@@ -9,7 +9,6 @@ const {Item} = Descriptions;
 
 export const TaskDetails = () => {
     const {taskId} = useParams<{taskId: string}>();
-    const {projectId} = useParams<{projectId: string}>();
 
     //Витягуємо по id через api, дані про 1 задачу
 
@@ -27,16 +26,16 @@ export const TaskDetails = () => {
                 </Descriptions>
                     <Space style={{ marginTop: 16 }}>
                     <Button type="primary" icon={<EditOutlined />} size="small">
-                    <Link to={`/project/${projectId}/tasks/${taskId}/edit`}>Edit Task</Link>
+                    <Link to={`/tasks/${taskId}/edit`}>Edit Task</Link>
                     </Button>
                     <Button danger icon={<DeleteOutlined />} size="small">
-                    <Link to={`/project/${taskId}/delete`}>Delete Task</Link>
+                    <Link to={`/tasks/${taskId}/delete`}>Delete Task</Link>
                     </Button>
                     <Button icon={<ArrowLeftOutlined />} size="small">
-                    <Link to={`/project/`}>Back</Link>
+                    <Link to={`/boards/`}>Back</Link>
                     </Button>
                     <Button type="dashed" size="small">
-                    <Link to={`/project/${taskId}/tasks`}>Open Tasks</Link>
+                    <Link to={`/tasks/${taskId}/`}>Open Tasks</Link>
                     </Button>
                 </Space>
             <Divider />
