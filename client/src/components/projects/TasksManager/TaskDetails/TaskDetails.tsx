@@ -9,7 +9,6 @@ const {Item} = Descriptions;
 
 export const TaskDetails = () => {
     const {taskId} = useParams<{taskId: string}>();
-    const {boardId} = useParams<{boardId: string}>();
 
     //Витягуємо по id через api, дані про 1 задачу
 
