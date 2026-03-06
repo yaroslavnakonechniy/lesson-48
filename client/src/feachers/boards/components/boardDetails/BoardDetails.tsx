@@ -10,14 +10,14 @@ const {Item} = Descriptions;
 
 export const BoardDetailes = () => {
     const { boardId } = useParams<{ boardId: string }>();
-    const { data, isLoading, error } = useGetBoardByIdQuery(boardId!);
+    const { data, isLoading, isError } = useGetBoardByIdQuery(boardId!);
     const { performDelete } = useDeleteBoard();
 
     if (isLoading) {
         return <Spin size="large" style={{ marginTop: 100 }} />;
     }
 
-    if (error) {
+    if (isError) {
         return <Alert type="error" message="Failed to load boards" />;
     }
 

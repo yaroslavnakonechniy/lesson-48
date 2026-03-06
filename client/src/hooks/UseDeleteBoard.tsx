@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 import {  useDeleteBoardMutation } from "../feachers/boards/api/boards.api"
 
 export const useDeleteBoard = () => {
@@ -9,9 +10,9 @@ export const useDeleteBoard = () => {
         try {
             await deleteBoard(boardId).unwrap();
             navigate("/boards");
+            message.success("Project deleted successfully");
         } catch (error) {
-            console.error("Delete failed:", error);
-        // Тут можна додати toast-сповіщення про помилку
+            message.error("Failed to delete project");
         }
     };
 

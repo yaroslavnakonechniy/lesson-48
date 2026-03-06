@@ -1,4 +1,4 @@
-import { Button, Form, Input, Divider, Typography } from 'antd';
+import { Button, Form, Input, Divider, Typography, message } from 'antd';
 import { useEffect } from 'react';
 import { useCreateBoardMutation, useUpdateBoardMutation } from '../../api/boards.api';
 import type { Board } from '../../api/boards.api';
@@ -38,7 +38,7 @@ export const FormBoard = ( {board, mode}: Props ) => {
             Description: board.description,
         });
         }
-    }, [board]);
+    }, [board, mode, form]);
 
     const onFinish = async (values: any) => {
         const payload = {
@@ -47,17 +47,33 @@ export const FormBoard = ( {board, mode}: Props ) => {
             authorId: values.AuthorId
         }
 
-        if (mode === "create") {
-            await createBoard(payload);
-            navigate("/boards");
-        }
+        try {
 
-        if (mode === "edit" && board) {
-            await updateBoard({
-            id: board.id,
-            ...payload
-            })
+            if (mode === "create") {
+
+                await createBoard(payload).unwrap();
+
+                message.success("Board created successfully");
+
+            }
+
+            if (mode === "edit" && board) {
+
+                await updateBoard({
+                    id: board.id,
+                    ...payload
+                }).unwrap();
+
+                message.success("Board updated successfully");
+
+            }
+
             navigate("/boards");
+
+        } catch (error) {
+
+            message.error("Operation failed");
+
         }
     };
 
@@ -80,10 +96,6 @@ export const FormBoard = ( {board, mode}: Props ) => {
                             { min: 3, message: "Name must be at least 3 characters" },
                             { max: 50, message: "Name must be less than 50 characters" }
                         ]}>
-                        <Input />
-                    </Form.Item>
-                    
-                    <Form.Item label="AuthorId" name="AuthorId" rules={[{ required: true, message: 'Please input!' }]}>
                         <Input />
                     </Form.Item>
 
