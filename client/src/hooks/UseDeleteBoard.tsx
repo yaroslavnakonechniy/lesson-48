@@ -10,9 +10,9 @@ export const useDeleteBoard = () => {
         try {
             await deleteBoard(boardId).unwrap();
             navigate("/boards");
-            message.success("Project deleted successfully");
+            message.success("Board deleted successfully");
         } catch (error) {
-            message.error("Failed to delete project");
+            message.error("Failed to delete Board");
         }
     };
 

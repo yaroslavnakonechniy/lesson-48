@@ -41,24 +41,24 @@ export const boardsApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body,
             }),
-        invalidatesTags: ['Boards'],
+            invalidatesTags: ['Boards'],
         }),
 
         updateBoard: builder.mutation<Board, { id: string; name: string; description?: string; }>({
-        query: ({ id, ...body }) => ({
-            url: `/boards/${id}`,
-            method: 'PUT',
-            body,
-        }),
-        invalidatesTags: ['Boards'],
+            query: ({ id, ...body }) => ({
+                url: `/boards/${id}`,
+                method: 'PUT',
+                body,
+            }),
+            invalidatesTags: ['Boards'],
         }),
 
         deleteBoard: builder.mutation<void, string>({
-        query: (boardId) => ({
-            url: `/boards/${boardId}`,
-            method: 'DELETE',
-        }),
-        invalidatesTags: ['Boards'],
+            query: (boardId) => ({
+                url: `/boards/${boardId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Boards'],
         }),
     }),
 });
