@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { FormBoard } from "./Form"
-import { FormTask } from '../../../../components/projects/TasksManager/Form/Form';
+import { FormTask } from '../../../tasks/components/form/Form';
 import { useCreateAction } from '../../../../hooks/UseCreateAction';
 
 export const FormPopUp = () => {
@@ -18,7 +18,7 @@ export const FormPopUp = () => {
             width={isTask ? 700 : 520}
         >
             {isTask ? (
-                <FormTask />
+                <FormTask mode="create"/>
             ) : (
                 <FormBoard mode="create"/>
             )}

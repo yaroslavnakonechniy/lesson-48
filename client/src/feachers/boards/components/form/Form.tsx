@@ -1,6 +1,6 @@
 import { Button, Form, Input, Divider, Typography, message } from 'antd';
 import { useEffect } from 'react';
-import { useCreateBoardMutation, useUpdateBoardMutation } from '../../api/boards.api';
+import { useCreateBoardMutation, useUpdateBoardMutation } from '../../api/boards.api'
 import type { Board } from '../../api/boards.api';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,12 +17,12 @@ const formItemLayout = {
     },
 };
 
-type Props = {
-  board?: Board;
-  mode: "create" | "edit";
+export type CreateProps = {
+    board?: Board;
+    mode: "create" | "edit";
 };
 //форма для створення і редагування проекта, взалежності від кліку на кнопки Create/Edit кнопки форми будуть відповідати натиснутій.
-export const FormBoard = ( {board, mode}: Props ) => {
+export const FormBoard = ( {board, mode}: CreateProps ) => {
     const [form] = Form.useForm();
     const variant = Form.useWatch('variant', form);
     const navigate = useNavigate();
@@ -32,19 +32,18 @@ export const FormBoard = ( {board, mode}: Props ) => {
 
     useEffect(() => {
         if (mode === "edit" && board) {
-        form.setFieldsValue({
-            ProjectName: board.name,
-            AuthorId: board.authorId,
-            Description: board.description,
-        });
+            form.setFieldsValue({
+                BoardName: board.name,
+                Description: board.description,
+            });
         }
+
     }, [board, mode, form]);
 
     const onFinish = async (values: any) => {
         const payload = {
-            name: values.ProjectName,
+            name: values.BoardName,
             description: values.Description,
-            authorId: values.AuthorId
         }
 
         try {
@@ -80,7 +79,7 @@ export const FormBoard = ( {board, mode}: Props ) => {
     return(
         <>
             <Divider/>
-                <Title level={2}>Form Project</Title>
+                <Title level={2}>{mode === "edit" ? "Edit board" : "Create board"}</Title>
                 <Form
                     {...formItemLayout}
                     form={form}
@@ -90,19 +89,26 @@ export const FormBoard = ( {board, mode}: Props ) => {
                     initialValues={{ variant: 'filled' }}
                     >
 
-                    <Form.Item label="ProjectName" name="ProjectName" 
+                    <Form.Item 
+                        label="BoardName" 
+                        name="BoardName" 
                         rules={[
                             { required: true, message: 'Please input!' },
                             { min: 3, message: "Name must be at least 3 characters" },
                             { max: 50, message: "Name must be less than 50 characters" }
-                        ]}>
+                        ]}
+                    >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
                         label="Description"
                         name="Description"
-                        rules={[{ required: true, message: 'Please input!' }]}
+                        rules={[
+                            { required: true, message: 'Please input!' },
+                            { min: 3, message: "Name must be at least 3 characters" },
+                            { max: 100, message: "Name must be less than 100 characters" }
+                        ]}
                     >
                         <Input.TextArea />
                     </Form.Item>

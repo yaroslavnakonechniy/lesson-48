@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import {  useDeleteBoardMutation } from "../feachers/boards/api/boards.api"
+import { useDeleteBoardMutation } from "../feachers/boards/api/boards.api"
 
 export const useDeleteBoard = () => {
     const navigate = useNavigate();

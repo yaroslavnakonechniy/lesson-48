@@ -1,6 +1,6 @@
 import Title from "antd/es/typography/Title"
-import type { ColumnProps } from "../../../../../types/column.types"
-import { CardTask } from "../CardTask/CardTask"
+import type { ColumnProps } from "../../../../types/column.types"
+import { CardTask } from "../cardTask/CardTask"
 
 
 export const Column = ({title, color, tasks}:ColumnProps) => {

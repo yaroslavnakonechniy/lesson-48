@@ -1,4 +1,4 @@
-import { useGetBoardsQuery } from '../api/boards.api';
+import { useGetBoardsQuery } from "../api/boards.api";
 import { Row, Spin, Alert } from "antd";
 import { CardBoard } from "../components/cardBoard/CardBoard"
     

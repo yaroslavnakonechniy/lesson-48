@@ -28,15 +28,15 @@ export const BoardDetailes = () => {
     return(
         <>
             <Divider />
-                <Descriptions title="Project Info" style={{ padding: "40px" }}>
-                    <Item label="NameProject">{data?.name} </Item>
-                    <Item label="ProjectId">{data?.id}</Item>
+                <Descriptions title="Board Info" style={{ padding: "40px" }}>
+                    <Item label="BoardName">{data?.name} </Item>
+                    <Item label="BoardId">{data?.id}</Item>
                     <Item label="AuthorId">{data?.authorId}</Item>
-                    <Item label="DescriptionProject">{data?.description}</Item>
+                    <Item label="BoardDescription">{data?.description}</Item>
                 </Descriptions>
                     <Space style={{ marginTop: 16 }}>
                     <Button type="primary" icon={<EditOutlined />} size="small">
-                    <Link to={`/boards/${boardId}/edit`}>Edit Project</Link>
+                        <Link to={`/boards/${boardId}/edit`}>Edit Project</Link>
                     </Button>
                     <Popconfirm
                         title="Delete project?"
@@ -50,10 +50,10 @@ export const BoardDetailes = () => {
                         </Button>
                     </Popconfirm>
                     <Button icon={<ArrowLeftOutlined />} size="small">
-                    <Link to={`/boards/`}>Back</Link>
+                        <Link to={`/boards/`}>Back</Link>
                     </Button>
                     <Button type="dashed" size="small">
-                    <Link to={`/boards/${boardId}/tasks`}>Open Tasks</Link>
+                        <Link to={`/boards/${boardId}/tasks`}>Open Tasks</Link>
                     </Button>
                 </Space>
             <Divider />

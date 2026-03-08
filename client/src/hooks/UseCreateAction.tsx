@@ -17,7 +17,7 @@ export const useCreateAction = () => {
         isBoard,
         boardId,
         createPath: isTask
-            ? `/tasks/create` 
+            ? `/boards/${boardId}/tasks/create` 
             : '/boards/create'
     };
 };
