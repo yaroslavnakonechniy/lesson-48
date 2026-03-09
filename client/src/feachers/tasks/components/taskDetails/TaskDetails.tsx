@@ -3,7 +3,7 @@ import { Descriptions, Divider, Space, Button, Spin, Alert, Popconfirm } from 'a
 import { EditOutlined, DeleteOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import { useGetTaskByIdQuery } from "../../api/tasks.api";
-import { useDeleteTask } from "../../../../hooks/useDeleteTask";
+import { useDeleteTask } from "../../../../hooks/UseDeleteTask";
 
 const {Item} = Descriptions;
 
@@ -49,7 +49,7 @@ export const TaskDetails = () => {
                         </Button>
                     </Popconfirm>
                     <Button icon={<ArrowLeftOutlined />} size="small">
-                    <Link to={`/boards/`}>Back</Link>
+                    <Link to={`/boards/${data?.boardId}/tasks/`}>Back</Link>
                     </Button>
                 </Space>
             <Divider />

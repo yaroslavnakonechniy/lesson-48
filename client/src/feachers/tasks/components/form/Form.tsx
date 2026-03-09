@@ -58,7 +58,7 @@ export const FormTask = ({ task, mode }: CreateTaskProps) => {
             const cleanBoardId = (boardId === "undefined" || !boardId) ? undefined : boardId;
 
             form.setFieldsValue({
-            TaskBoardId: cleanBoardId
+                TaskBoardId: cleanBoardId
             });
         }
 
@@ -83,6 +83,7 @@ export const FormTask = ({ task, mode }: CreateTaskProps) => {
                 }).unwrap();
 
                 message.success("Task created successfully");
+                navigate(-1);
             }
 
             if (mode === "edit" && task) {
@@ -94,14 +95,11 @@ export const FormTask = ({ task, mode }: CreateTaskProps) => {
                 }).unwrap();
 
                 message.success("Task updated successfully");
+                navigate(1);
             }
-
-            navigate(`/boards/${values.TaskBoardId}/tasks`);
-
-        } catch (error) {
             
+        } catch (error) {
             message.error("Operation failed");
-
         }
     };
 

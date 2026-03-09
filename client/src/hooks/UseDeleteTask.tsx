@@ -9,7 +9,7 @@ export const useDeleteTask = () => {
     const performDelete = async (taskId: string) => {
         try {
             await deleteTask(taskId).unwrap();
-            navigate(-1);
+            navigate(1);
             message.success("Task deleted successfully");
         } catch (error) {
             message.error("Failed to delete task");

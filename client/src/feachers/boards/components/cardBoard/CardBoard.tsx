@@ -34,8 +34,8 @@ export const CardBoard = ({board}: CardProjectProps) => {
                         </Link>
                         ,
                         <Popconfirm
-                            title="Delete project?"
-                            description="Are you sure you want to delete this project?"
+                            title="Delete Board?"
+                            description="Are you sure you want to delete this Board?"
                             onConfirm={handleDelete}
                             okText="Yes"
                             cancelText="No"

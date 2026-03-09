@@ -37,7 +37,7 @@ export const tasksApi = baseApi.injectEndpoints({
             query: ({ id, workflow }) => ({
                 url: `/tasks/${id}/workflow`,
                 method: 'PUT',
-                body: workflow,
+                body: {workflow},
             }),
             invalidatesTags: (result, error, { id, boardId }) => [
                 { type: 'Tasks', id },
@@ -59,5 +59,6 @@ export const {
     useGetTaskByIdQuery,
     useCreateTaskMutation,
     useUpdateTaskMutation,
+    useUpdateTaskWorkflowMutation,
     useDeleteTaskMutation,
 } = tasksApi;
