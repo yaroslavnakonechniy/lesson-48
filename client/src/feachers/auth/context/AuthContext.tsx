@@ -8,22 +8,22 @@ export const AuthProvider = ({ children }: any) => {
   const [signOut] = useSignOutMutation();
 
   const logout = async () => {
-    await signOut();
-    window.location.href = '/login';
+        await signOut();
+        window.location.href = '/login';
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user: data?.data,
-        isAuth: !!data?.data,
-        isLoading,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+        <AuthContext.Provider
+        value={{
+            user: data?.data,
+            isAuth: !!data?.data,
+            isLoading,
+            logout,
+        }}
+        >
+        {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);

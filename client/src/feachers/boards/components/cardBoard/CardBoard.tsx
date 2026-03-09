@@ -21,7 +21,9 @@ export const CardBoard = ({board}: CardProjectProps) => {
     return(
         <>
             <Col xs={24} sm={12} md={8}>
-                <Card title={board.name} variant="borderless" 
+                <Card 
+                    title={board.name} 
+                    variant="borderless" 
                     actions={[
                         <Link to={`/boards/${board.id}`}>
                             <EyeOutlined key="view" />
@@ -32,13 +34,13 @@ export const CardBoard = ({board}: CardProjectProps) => {
                         </Link>
                         ,
                         <Popconfirm
-                            title="Delete project?"
-                            description="Are you sure you want to delete this project?"
+                            title="Delete Board?"
+                            description="Are you sure you want to delete this Board?"
                             onConfirm={handleDelete}
                             okText="Yes"
                             cancelText="No"
                         >
-                            <DeleteOutlined key="delete" style={{ color: 'red' }} onClick={() => console.log('Видалити!')} />
+                            <DeleteOutlined key="delete" style={{ color: 'red' }} />
                         </Popconfirm>
                         ,
                     ]}

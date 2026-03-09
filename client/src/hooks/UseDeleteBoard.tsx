@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import {  useDeleteBoardMutation } from "../feachers/boards/api/boards.api"
+import { useDeleteBoardMutation } from "../feachers/boards/api/boards.api"
 
 export const useDeleteBoard = () => {
     const navigate = useNavigate();
@@ -10,9 +10,9 @@ export const useDeleteBoard = () => {
         try {
             await deleteBoard(boardId).unwrap();
             navigate("/boards");
-            message.success("Project deleted successfully");
+            message.success("Board deleted successfully");
         } catch (error) {
-            message.error("Failed to delete project");
+            message.error("Failed to delete Board");
         }
     };
 

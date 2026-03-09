@@ -1,15 +1,15 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { LayoutPage } from "../layouts/layout/Layout";
 import { Boards } from "../feachers/boards/pages/Boards";
-import { TasksManager } from "../components/projects/TasksManager/TasksManager";
+import { TasksManager } from "../feachers/tasks/pages/TasksManager";
 import { BoardDetailes } from "../feachers/boards/components/boardDetails/BoardDetails";
-import { TaskDetails } from "../components/projects/TasksManager/TaskDetails/TaskDetails";
+import { TaskDetails } from "../feachers/tasks/components/taskDetails/TaskDetails";
 import { FormPopUp } from "../feachers/boards/components/form/CreateBoard";
-import { FormTask } from "../components/projects/TasksManager/Form/Form";
 import { ProtectedRoute } from "../feachers/auth/components/ProtectedRoute";
 import { LoginPage } from "../feachers/auth/pages/LoginPages";
 import { CreateType } from "../interfaces/createAction";
 import { EditBoardPage } from "../feachers/boards/pages/EditBoardPage";
+import { EditTaskPage } from "../feachers/tasks/pages/EditTaskPage";
 
 export const router = createBrowserRouter([
     {   
@@ -37,13 +37,21 @@ export const router = createBrowserRouter([
                             },
                             {
                                 path: 'edit',
-                                Component: EditBoardPage
+                                Component: EditBoardPage,
                             },
                             {
                                 path: 'tasks',
                                 handle: {createType: CreateType.TASK},
                                 Component: TasksManager,
+                                children: [
+                                    {
+                                        path: 'create',
+                                        handle: {createType: CreateType.TASK},
+                                        Component: FormPopUp,
+                                    }
+                                ]
                             },
+                            
                         ]
                     },
                 ]
@@ -55,15 +63,15 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         path: "edit",     
-                        Component: FormTask 
+                        Component: EditTaskPage, 
                     }
                 ]
             },
-            {
+/*             {
                 path: "tasks/create",
                 handle: {createType: CreateType.TASK},
                 Component: FormPopUp,
-            }
+            } */
         ]
 
     },
