@@ -4,7 +4,7 @@ export const FooterPage = () => {
     return(
         <>
             <Footer>
-                Created be Yaroslav!
+                Created by Yaroslav!
             </Footer>
         </>
     )

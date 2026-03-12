@@ -21,10 +21,10 @@ export const AppHeader = () => {
                     <Button type="primary" onClick={() => navigate(createPath)}>Create</Button>
 
                     {isAuth ? (
-                        <Button onClick={logout}>Logout</Button>
+                        <Button onClick={logout}>Log out</Button>
                         ) : (
                         <Link to="/login">
-                            <Button type="primary">Login</Button>
+                            <Button type="primary">Log in</Button>
                         </Link>
                     )}
                 </nav>

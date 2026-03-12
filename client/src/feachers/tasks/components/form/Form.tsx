@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Button, Form, Input, Divider, Typography, message, Select, Spin, Alert } from 'antd';
-import type { ITask, Workflow } from '../../../../types/task.type';
+import type { Workflow } from '../../../../types/workflow.type';
+import type { CreateTaskProps, FormValues} from '../../../../types/formTask.type';
 import { useCreateTaskMutation, useUpdateTaskMutation } from '../../api/tasks.api';
 import { useGetBoardsQuery } from '../../../boards/api/boards.api';
 
@@ -23,18 +24,6 @@ export const WORKFLOWS: Workflow[] = [
   { code: "progress", label: "In Progress" },
   { code: "done", label: "Done" },
 ];
-
-type CreateTaskProps = {
-    task?: ITask,
-    mode: "create" | "edit";
-}
-
-type FormValues = {
-  TaskTitle: string
-  TaskDescription: string
-  TaskWorkflow: Workflow["code"]
-  TaskBoardId: string
-}
 
 export const FormTask = ({ task, mode }: CreateTaskProps) => {
     const [form] = Form.useForm();
@@ -115,7 +104,7 @@ export const FormTask = ({ task, mode }: CreateTaskProps) => {
                     style={{ maxWidth: 600, margin: "0 auto" }}
                     initialValues={{ 
                         variant: 'filled',
-                        TaskBoardId: boardId // Якщо він undefined, покажеться плейсхолдер
+                        TaskBoardId: boardId
                     }}
                     >
 

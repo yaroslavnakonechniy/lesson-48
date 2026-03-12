@@ -1,16 +1,18 @@
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { useMemo } from "react";
 import { Row, Col, Spin, Alert } from "antd";
 import { Column } from "../components/column/Column";
 import { useGetTasksBoardByIdQuery } from "../../boards/api/boards.api";
-//Список задач для окремого Борда.
 
 export const ListTasks = () => {
     const {boardId} = useParams<{boardId: string}>();
     const { data, isLoading, error } = useGetTasksBoardByIdQuery(boardId!);
-
-    console.log("Task:Тип данных:", typeof data, "Это массив?", Array.isArray(data), "Значение:", data);//
     
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+    }, []);
+
     const columns = useMemo(() => {
         return {
             todo: data?.filter(t => t.workflow?.code === "todo") ?? [],
@@ -29,6 +31,7 @@ export const ListTasks = () => {
 
     return(
         <>
+            <hr />
             <div style={{ padding: 40 }}>
                 <Row gutter={16} align="top">
 
@@ -45,6 +48,7 @@ export const ListTasks = () => {
                     </Col>
                 </Row>
             </div>
+            <hr />
         </>
     )
 }

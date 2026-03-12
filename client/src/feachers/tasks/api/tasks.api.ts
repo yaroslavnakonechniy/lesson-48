@@ -1,6 +1,6 @@
 import { baseApi } from "../../../app/api/baseApi";
-import type { ApiResponse } from "../../../types/apiResponse.type";
-import type { ITask } from "../../../types/task.type";
+import type { ApiResponse } from "../../../interfaces/apiResponse";
+import type { ITask } from "../../../interfaces/task";
 
 export const tasksApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({

@@ -1,5 +1,4 @@
 
-
 .header{
     display: flex;
     align-items: center;
@@ -7,9 +6,8 @@
     background-color: #f8cf8d;
     justify-content: space-between;
 
-
-}
-
-.navigation{
-        
+    &__navigation{
+        display: flex;
+        gap: 10px;
     }
+}

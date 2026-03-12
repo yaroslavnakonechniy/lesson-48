@@ -1,11 +1,11 @@
+import { useParams, Link } from "react-router-dom";
 import { Descriptions, Divider, Space, Button } from 'antd';
 import { EditOutlined, DeleteOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { Spin, Alert, Popconfirm } from "antd";
-import { useParams, Link } from "react-router-dom";
 import { useGetBoardByIdQuery } from '../../api/boards.api';
 import { useDeleteBoard } from "../../../../hooks/UseDeleteBoard"
 
-const {Item} = Descriptions;
+const { Item } = Descriptions;
 
 export const BoardDetailes = () => {
     const { boardId } = useParams<{ boardId: string }>();
