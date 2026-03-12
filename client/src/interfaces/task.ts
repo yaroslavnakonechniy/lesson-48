@@ -1,3 +1,5 @@
+import type { Workflow } from "../types/workflow.type";
+
 export interface ITask {
     id: string,
     title: string,
@@ -5,13 +7,4 @@ export interface ITask {
     workflow: Workflow,
     boardId: string,
     authorId: string
-}
-
-export type Workflow = {
-    code: "todo" | "progress" | "done",
-    label: string
-}
-
-export type CardTaskProps = {
-    card: ITask
 }

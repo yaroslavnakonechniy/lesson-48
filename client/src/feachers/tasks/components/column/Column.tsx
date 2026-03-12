@@ -1,17 +1,15 @@
 import Title from "antd/es/typography/Title"
-import type { ColumnProps } from "../../../../types/column.types"
+import type { ColumnProps } from "../../../../types/column.type"
 import { CardTask } from "../cardTask/CardTask"
 
-
-export const Column = ({title, color, tasks}:ColumnProps) => {
+export const Column = ({ title, color, tasks }: ColumnProps) => {
     return(
         <>
             <div style={{
                 background: color,
                 padding: 16,
                 borderRadius: 8,
-                height: 800,
-                overflow: "auto",
+                height: '100%',
                 
                 }}>
 
@@ -24,5 +22,3 @@ export const Column = ({title, color, tasks}:ColumnProps) => {
         </>
     )
 }
-
-

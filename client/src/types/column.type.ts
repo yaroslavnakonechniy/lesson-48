@@ -1,4 +1,4 @@
-import type { ITask } from "./task.type";
+import type { ITask } from "../interfaces/task";
 
 export type ColumnProps = {
   title: string;

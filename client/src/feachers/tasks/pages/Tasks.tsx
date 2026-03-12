@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom"
 import { ListTasks } from "./ListTasks"
 
-export const TasksManager = () => {
+export const Tasks = () => {
     return(
         <>
             <Outlet/>

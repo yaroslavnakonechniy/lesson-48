@@ -1,8 +1,8 @@
-import { Button, Form, Input, Divider, Typography, message } from 'antd';
 import { useEffect } from 'react';
-import { useCreateBoardMutation, useUpdateBoardMutation } from '../../api/boards.api'
-import type { Board } from '../../api/boards.api';
 import { useNavigate } from 'react-router-dom';
+import { Button, Form, Input, Divider, Typography, message } from 'antd';
+import { useCreateBoardMutation, useUpdateBoardMutation } from '../../api/boards.api'
+import type { CreateBoardProps } from '../../../../types/formBoard.type'
 
 const { Title } = Typography
 
@@ -17,12 +17,7 @@ const formItemLayout = {
     },
 };
 
-export type CreateProps = {
-    board?: Board;
-    mode: "create" | "edit";
-};
-//форма для створення і редагування проекта, взалежності від кліку на кнопки Create/Edit кнопки форми будуть відповідати натиснутій.
-export const FormBoard = ( {board, mode}: CreateProps ) => {
+export const FormBoard = ( {board, mode}: CreateBoardProps ) => {
     const [form] = Form.useForm();
     const variant = Form.useWatch('variant', form);
     const navigate = useNavigate();

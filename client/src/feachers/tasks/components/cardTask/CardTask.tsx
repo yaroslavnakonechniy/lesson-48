@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom"
 import { Card, Popconfirm, Tooltip  } from "antd";
-import { DeleteOutlined, EditOutlined, EyeOutlined, ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined, ArrowLeftOutlined, ArrowRightOutlined, MessageOutlined } from '@ant-design/icons';
 import Paragraph from "antd/es/typography/Paragraph";
-import type { CardTaskProps } from "../../../../types/task.type";
+import type { CardTaskProps } from "../../../../types/cards/taskProps";
 import { useDeleteTask } from "../../../../hooks/UseDeleteTask";
 import { useUpdateTaskWorkflowMutation } from "../../api/tasks.api"
 
-export const CardTask = ({card}:CardTaskProps) => {
+export const CardTask = ({card}: CardTaskProps) => {
     const { performDelete, isDeleting } = useDeleteTask();
     const [updateWorkflow, { isLoading: isUpdating }] = useUpdateTaskWorkflowMutation();
 
@@ -24,7 +24,9 @@ export const CardTask = ({card}:CardTaskProps) => {
     const currentIndex = statuses.indexOf(card.workflow.code);
 
     const handleDelete = () => {
-        if (card.id) performDelete(card.id);
+        if (card.id && card?.boardId) {
+            performDelete(card.id, card.boardId);
+        }
     };
 
     return(
@@ -32,9 +34,10 @@ export const CardTask = ({card}:CardTaskProps) => {
             <Card 
                 title={card.title} 
                 variant="borderless"
+                style={{ margin: '20px 0' }} 
                 styles={{
                     header: {
-                        backgroundColor: 'orange', // світло-сірий фон
+                        backgroundColor: '#f3e3c9',
                         borderBottom: '1px solid #f0f0f0',
                         minHeight: '40px',
                         padding: '0 12px',
@@ -42,7 +45,7 @@ export const CardTask = ({card}:CardTaskProps) => {
                     title: {
                         fontSize: '14px',
                         fontWeight: 600,
-                        color: '#1890ff', // синій колір для заголовка
+                        color: '#1890ff',
                     },
                     body: {
                         padding: '12px',
@@ -68,6 +71,10 @@ export const CardTask = ({card}:CardTaskProps) => {
 
                     <Link key="edit" to={`/tasks/${card.id}/edit`}>
                         <EditOutlined style={{ color: 'black' }} />
+                    </Link>,
+
+                    <Link key="edit" to={`/tasks/${card.id}/comments`}>
+                        <MessageOutlined style={{ color: 'black' }} />,
                     </Link>,
 
                     <Popconfirm

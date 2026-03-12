@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { useGetTaskByIdQuery } from "../../api/tasks.api";
 import { useDeleteTask } from "../../../../hooks/UseDeleteTask";
 
-const {Item} = Descriptions;
+const { Item } = Descriptions;
 
 export const TaskDetails = () => {
-    const {taskId} = useParams<{taskId: string}>();
+    const { taskId } = useParams<{taskId: string}>();
     const { data, isLoading, isError } = useGetTaskByIdQuery(taskId!);
     const { performDelete } = useDeleteTask();
 
@@ -21,7 +21,9 @@ export const TaskDetails = () => {
     }
 
     const handleDelete = () => {
-        if (taskId) performDelete(taskId);
+        if (taskId && data?.boardId) {
+            performDelete(taskId, data.boardId);
+        }
     };
 
     return(
@@ -34,9 +36,15 @@ export const TaskDetails = () => {
                     <Item label="TaskDescription">{data?.description}</Item>
                 </Descriptions>
                     <Space style={{ marginTop: 16 }}>
+
                     <Button type="primary" icon={<EditOutlined />} size="small">
-                    <Link to={`/tasks/${taskId}/edit`}>Edit Task</Link>
+                        <Link to={`/tasks/${taskId}/edit`}>Edit Task</Link>
                     </Button>
+
+                    <Button type="primary" icon={<EditOutlined />} size="small">
+                        <Link to={`/tasks/${taskId}/comments/create`}>Add Comment</Link>
+                    </Button>
+
                     <Popconfirm
                         title="Delete Task?"
                         description="Are you sure you want to delete this Task?"
@@ -48,8 +56,9 @@ export const TaskDetails = () => {
                             Delete Task
                         </Button>
                     </Popconfirm>
+
                     <Button icon={<ArrowLeftOutlined />} size="small">
-                    <Link to={`/boards/${data?.boardId}/tasks/`}>Back</Link>
+                        <Link to={`/boards/${data?.boardId}/tasks/`}>Back</Link>
                     </Button>
                 </Space>
             <Divider />

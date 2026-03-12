@@ -1,5 +1,5 @@
 import { useMatches, useParams, type UIMatch } from "react-router-dom";
-import { CreateType } from "../interfaces/createAction";
+import { CreateType } from "../types/createAction.type";
 
 export const useCreateAction = () => {
     const { boardId } = useParams();

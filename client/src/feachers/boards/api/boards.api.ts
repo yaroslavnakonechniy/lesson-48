@@ -1,25 +1,19 @@
 import { baseApi } from '../../../app/api/baseApi';
-import type { ITask } from '../../../types/task.type';
-import type { ApiResponse } from '../../../types/apiResponse.type';
-
-export interface Board {
-    id: string;
-    name: string;
-    description?: string;
-    authorId: string;
-}
+import type { ITask } from '../../../interfaces/task';
+import type { ApiResponse } from '../../../interfaces/apiResponse';
+import type { IBoard } from '../../../interfaces/board';
 
 export const boardsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getBoards: builder.query<Board[], void>({
+        getBoards: builder.query<IBoard[], void>({
             query: () => '/boards',
-            transformResponse: (response: ApiResponse<Board[]>): Board[] => response.data,
+            transformResponse: (response: ApiResponse<IBoard[]>): IBoard[] => response.data,
             providesTags: ['Boards'],
         }),
 
-        getBoardById: builder.query<Board, string>({
+        getBoardById: builder.query<IBoard, string>({
             query: (boardId) => `/boards/${boardId}`,
-            transformResponse: (response: ApiResponse<Board>) => response.data,
+            transformResponse: (response: ApiResponse<IBoard>) => response.data,
             providesTags: ['Boards'],
         }),
 
@@ -35,7 +29,7 @@ export const boardsApi = baseApi.injectEndpoints({
                 : [{ type: 'Tasks', id: `LIST-${boardId}` }],
         }),
 
-        createBoard: builder.mutation<Board, { name: string; description?: string }>({
+        createBoard: builder.mutation<IBoard, { name: string; description?: string }>({
             query: (body) => ({
                 url: '/boards',
                 method: 'POST',
@@ -44,7 +38,7 @@ export const boardsApi = baseApi.injectEndpoints({
             invalidatesTags: ['Boards'],
         }),
 
-        updateBoard: builder.mutation<Board, { id: string; name: string; description?: string; }>({
+        updateBoard: builder.mutation<IBoard, { id: string; name: string; description?: string; }>({
             query: ({ id, ...body }) => ({
                 url: `/boards/${id}`,
                 method: 'PUT',
