@@ -1,11 +1,17 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Spin } from 'antd';
+import { useGetMeQuery } from '../api/auth.api';
 
 export const ProtectedRoute = () => {
-    const { isAuth, isLoading } = useAuth();
+    const { data, isLoading, isError } = useGetMeQuery();
 
-    if (isLoading) return null;
-    if (!isAuth) return <Navigate to="/login" replace />;
+    if (isLoading) {
+        return <div style={{ textAlign: 'center', marginTop: 50 }}><Spin size="large" /></div>;
+    }
+
+    if (isError || !data?.data) {
+        return <Navigate to="/login" replace />;
+    }
 
     return <Outlet />;
 };

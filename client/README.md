@@ -1,6 +1,3 @@
-npm i @ant-design/icons
-npm i react-router-dom
-
 Final project. Using API to create a task manager. 
 
 Technologies:

@@ -7,6 +7,7 @@ import { TaskDetails } from "../feachers/tasks/components/taskDetails/TaskDetail
 import { FormPopUp } from "../feachers/boards/components/form/CreateBoard";
 import { ProtectedRoute } from "../feachers/auth/components/ProtectedRoute";
 import { LoginPage } from "../feachers/auth/pages/LoginPages";
+import { RegisterPage } from "../feachers/auth/pages/RegisterPage";
 import { CreateType } from "../types/createAction.type";
 import { EditBoardPage } from "../feachers/boards/pages/EditBoardPage";
 import { EditTaskPage } from "../feachers/tasks/pages/EditTaskPage";
@@ -91,6 +92,10 @@ export const router = createBrowserRouter([
     {
         path: "/login",
         Component: LoginPage,
+    },
+    {
+        path: "/register",
+        Component: RegisterPage,
     },
     {
         path: '*',
