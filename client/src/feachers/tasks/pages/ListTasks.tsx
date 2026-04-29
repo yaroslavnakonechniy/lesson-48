@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useMemo } from "react";
 import { Row, Col, Spin, Alert } from "antd";
@@ -8,10 +8,21 @@ import { useGetTasksBoardByIdQuery } from "../../boards/api/boards.api";
 export const ListTasks = () => {
     const {boardId} = useParams<{boardId: string}>();
     const { data, isLoading, error } = useGetTasksBoardByIdQuery(boardId!);
+    const navigate = useNavigate();
     
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }, []);
+
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                navigate(`/boards/${boardId}/tasks/create`); 
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [error, navigate, boardId]);
 
     const columns = useMemo(() => {
         return {
@@ -23,10 +34,6 @@ export const ListTasks = () => {
 
     if (isLoading) {
         return <Spin size="large" style={{ marginTop: 100 }} />;
-    }
-
-    if (error) {
-        return <Alert type="error" message="Failed to load tasks of board" />;
     }
 
     return(

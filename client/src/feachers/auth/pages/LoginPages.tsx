@@ -31,7 +31,7 @@ export const LoginPage = () => {
                     Login
                 </Button>
                 <div style={{ textAlign: 'center', marginTop: '16px' }}>
-                    <Space direction="vertical" size={0}>
+                    <Space orientation="vertical" size={0}>
                         <Link to="/register">Sign Up</Link>
                     </Space>
                 </div>

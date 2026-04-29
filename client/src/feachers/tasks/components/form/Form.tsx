@@ -58,7 +58,7 @@ export const FormTask = ({ task, mode }: CreateTaskProps) => {
     }
 
     if (error) {
-        return <Alert type="error" message="Failed to load boards" />;
+        return <Alert type="error" title="Failed to load boards" />;
     }
 
     const onFinish = async (values: FormValues) => {
