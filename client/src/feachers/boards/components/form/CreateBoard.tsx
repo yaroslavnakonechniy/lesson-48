@@ -14,7 +14,7 @@ export const FormPopUp = () => {
             open={true}
             onCancel={() => navigate(-1)} 
             footer={null}
-            destroyOnClose
+            destroyOnHidden
             width={isTask ? 700 : 520}
         >
             {isTask ? (

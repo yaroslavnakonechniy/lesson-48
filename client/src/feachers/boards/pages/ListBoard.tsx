@@ -1,17 +1,26 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGetBoardsQuery } from "../api/boards.api";
 import { Row, Spin, Alert } from "antd";
 import { CardBoard } from "../components/cardBoard/CardBoard"
 import type { IBoard } from "../../../interfaces/board";
 
 export const ListBoard = () => {
+    const navigate = useNavigate();
     const { data, isLoading, error } = useGetBoardsQuery();
+
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                navigate("/boards/create"); 
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [error, navigate]);
 
     if (isLoading) {
         return <Spin size="large" style={{ marginTop: 100 }} />;
-    }
-
-    if (error) {
-        return <Alert type="error" message="Failed to load boards" />;
     }
 
     return (

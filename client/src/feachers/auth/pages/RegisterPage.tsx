@@ -15,7 +15,7 @@ export const RegisterPage: React.FC = () => {
             backgroundColor: '#f0f2f5' 
         }}>
             <Card style={{ width: 400, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                <Space direction="vertical" size="middle" style={{ width: '100%', textAlign: 'center' }}>
+                <Space orientation="vertical" size="middle" style={{ width: '100%', textAlign: 'center' }}>
                     <Title level={2} style={{ marginBottom: 0 }}>Create an account</Title>
                     <Text type="secondary">Fill out the registration form</Text>
                     

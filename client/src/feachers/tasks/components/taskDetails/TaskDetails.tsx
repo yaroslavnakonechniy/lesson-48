@@ -17,7 +17,7 @@ export const TaskDetails = () => {
     }
 
     if (isError) {
-        return <Alert type="error" message="Failed to load boards" />;
+        return <Alert type="error" title="Failed to load boards" />;
     }
 
     const handleDelete = () => {
