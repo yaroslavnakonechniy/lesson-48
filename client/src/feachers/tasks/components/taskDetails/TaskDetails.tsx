@@ -4,7 +4,6 @@ import { EditOutlined, DeleteOutlined, ArrowLeftOutlined } from '@ant-design/ico
 import { Link } from "react-router-dom";
 import { useGetTaskByIdQuery } from "../../api/tasks.api";
 import { useDeleteTask } from "../../../../hooks/UseDeleteTask";
-import actionStyles from "../../../../styles/ActionButtons.module.scss";
 
 const { Item } = Descriptions;
 
@@ -36,13 +35,13 @@ export const TaskDetails = () => {
                     <Item label="TaskWorkflow">{(data?.workflow as any).label}</Item>
                     <Item label="TaskDescription">{data?.description}</Item>
                 </Descriptions>
-                <Space className={actionStyles.actions}>
+                    <Space style={{ marginTop: 16 }}>
 
                     <Button type="primary" icon={<EditOutlined />} size="small">
                         <Link to={`/tasks/${taskId}/edit`}>Edit Task</Link>
                     </Button>
 
-                    <Button type="primary" icon={<EditOutlined />} size="small" color="green" variant="solid">
+                    <Button type="primary" icon={<EditOutlined />} size="small">
                         <Link to={`/tasks/${taskId}/comments/create`}>Add Comment</Link>
                     </Button>
 

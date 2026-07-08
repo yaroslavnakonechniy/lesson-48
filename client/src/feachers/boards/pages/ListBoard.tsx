@@ -24,7 +24,7 @@ export const ListBoard = () => {
     }
 
     return (
-        <div style={{ padding: "10px" }}>
+        <div style={{ padding: "40px" }}>
             <Row gutter={[24, 24]}>
                 {data?.map((board: IBoard) => (
                     <CardBoard key={board.id} board={board} />
