@@ -3,7 +3,8 @@ import { Descriptions, Divider, Space, Button } from 'antd';
 import { EditOutlined, DeleteOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { Spin, Alert, Popconfirm } from "antd";
 import { useGetBoardByIdQuery } from '../../api/boards.api';
-import { useDeleteBoard } from "../../../../hooks/UseDeleteBoard"
+import { useDeleteBoard } from "../../../../hooks/UseDeleteBoard";
+import actionStyles from "../../../../styles/ActionButtons.module.scss";
 
 const { Item } = Descriptions;
 
@@ -33,7 +34,7 @@ export const BoardDetailes = () => {
                     <Item label="AuthorId">{data?.authorId}</Item>
                     <Item label="BoardDescription">{data?.description}</Item>
                 </Descriptions>
-                    <Space style={{ marginTop: 16 }}>
+                <Space className={actionStyles.actions}>
                     <Button type="primary" icon={<EditOutlined />} size="small">
                         <Link to={`/boards/${boardId}/edit`}>Edit Board</Link>
                     </Button>

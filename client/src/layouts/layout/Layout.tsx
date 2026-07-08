@@ -4,16 +4,14 @@ import { AppHeader } from "../header/AppHeader";
 import { FooterPage } from "../footer/Footer";
 import styles from "./styles.module.scss";
 
-const { Footer, Content, Header } = Layout;
+const { Footer, Content } = Layout;
  
 export const LayoutPage = () => {
     return (
         <Layout className={styles.layout}>
         
-            <Header>
-                <AppHeader />
-            </Header>
-
+            <AppHeader />
+            
             <Content className={styles.content}>
                 <Outlet />
             </Content>
