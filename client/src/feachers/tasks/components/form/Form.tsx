@@ -5,6 +5,7 @@ import type { Workflow } from '../../../../types/workflow.type';
 import type { CreateTaskProps, FormValues} from '../../../../types/formTask.type';
 import { useCreateTaskMutation, useUpdateTaskMutation } from '../../api/tasks.api';
 import { useGetBoardsQuery } from '../../../boards/api/boards.api';
+import buttonStyles from "../../../../styles/Button.module.scss";
 
 const { Title } = Typography
 
@@ -172,7 +173,7 @@ export const FormTask = ({ task, mode }: CreateTaskProps) => {
                     }
                     
                     <Form.Item label={null}>
-                        <Button type="primary" htmlType="submit" size="large">
+                        <Button type="primary" htmlType="submit" className={buttonStyles.submitButton}>
                             {mode === "edit" ? "Save" : "Create Task"}
                         </Button>
                     </Form.Item>

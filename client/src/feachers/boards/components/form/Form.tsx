@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Form, Input, Divider, Typography, message } from 'antd';
 import { useCreateBoardMutation, useUpdateBoardMutation } from '../../api/boards.api'
 import type { CreateBoardProps } from '../../../../types/formBoard.type'
+import buttonStyles from "../../../../styles/Button.module.scss";
 
 const { Title } = Typography
 
@@ -109,7 +110,7 @@ export const FormBoard = ( {board, mode}: CreateBoardProps ) => {
                     </Form.Item>
 
                     <Form.Item label={null}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" className={buttonStyles.submitButton}>
                             Submit
                         </Button>
                     </Form.Item>

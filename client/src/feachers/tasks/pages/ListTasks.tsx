@@ -48,17 +48,17 @@ export const ListTasks = () => {
         <>
             <hr />
 
-            <div style={{ padding: 40 }}>
-                <Row gutter={16} align="top">
-                    <Col span={8}>
-                        <Column title="Todo" color="#f0f0f0" tasks={todo} />
+            <div style={{ padding: 10 }}>
+                <Row gutter={[16, 16]} align="top">
+                    <Col xs={24} sm={24} md={24} lg={8}>
+                        <Column title="Todos" color="#f0f0f0" tasks={todo} />
                     </Col>
-
-                    <Col span={8}>
+                    
+                    <Col xs={24} sm={24} md={24} lg={8}>
                         <Column title="In Progress" color="#e6f4ff" tasks={progress} />
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={24} sm={24} md={24} lg={8}>
                         <Column title="Done" color="#f6ffed" tasks={done} />
                     </Col>
                 </Row>
